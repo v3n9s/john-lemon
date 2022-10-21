@@ -1,7 +1,10 @@
 {
   "name": "john-lemon",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "lint": "eslint **/*.ts"
+  },
   "dependencies": {
     "@discordjs/opus": "^0.8.0",
     "@discordjs/voice": "^0.13.0",
