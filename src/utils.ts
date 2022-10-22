@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { Connection, Instance } from './player/connection';
+import { connections, Connection } from './player/connection';
 import { CommandHandler } from './types/command';
 
 export const isValidYoutubeLink = (url: string) =>
@@ -18,19 +18,19 @@ export const isYoutubePlaylistLink = (href: string) => {
 
 export const handleConnectionCreation =
   (
-    handler: (msg: Message<true>, connection: Instance) => void,
+    handler: (msg: Message<true>, connection: Connection) => void,
     voiceConnectionRequired = false,
   ): CommandHandler =>
   (msg: Message<true>) => {
-    let connection: Instance | undefined;
+    let connection: Connection | undefined;
     if (voiceConnectionRequired && msg.member?.voice.channel) {
-      connection = Connection.getCreateIfNotExist({
+      connection = connections.getCreateIfNotExist({
         guild: msg.guild,
         textChannel: msg.channel,
         voiceChannel: msg.member.voice.channel,
       });
     } else if (!voiceConnectionRequired && msg.guildId) {
-      connection = Connection.get(msg.guildId);
+      connection = connections.get(msg.guildId);
     }
     if (!connection) return;
     handler(msg, connection);

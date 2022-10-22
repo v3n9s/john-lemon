@@ -1,6 +1,6 @@
 import * as discordVoice from '@discordjs/voice';
 import ytpl from 'ytpl';
-import { Instance } from './connection';
+import { Connection } from './connection';
 import { Queue } from './queue';
 import { Track } from './track';
 
@@ -29,7 +29,7 @@ export class Player {
     this.discordPlayer.unpause();
   }
 
-  playIfFree(connection?: Instance) {
+  playIfFree(connection?: Connection) {
     if (this.discordPlayer.state.status !== 'idle') return;
     const track = this.queue.get(0);
     if (!track) return;

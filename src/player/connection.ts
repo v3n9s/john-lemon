@@ -3,22 +3,13 @@ import * as discordVoice from '@discordjs/voice';
 import { setTimeout as delay } from 'timers/promises';
 import { Player } from './player';
 
-export type Instance = {
+export class Connection {
   voiceConnection: discordVoice.VoiceConnection;
   textChannel: discord.GuildTextBasedChannel;
-  sendMessage: (text: string) => Promise<void>;
   voiceChannel: discord.VoiceBasedChannel;
   player: Player;
-};
 
-export class Connection {
-  private static connections: Record<string, Instance> = {};
-
-  static get(guildId: string) {
-    return this.connections[guildId];
-  }
-
-  static getCreateIfNotExist({
+  constructor({
     guild,
     textChannel,
     voiceChannel,
@@ -27,31 +18,58 @@ export class Connection {
     textChannel: discord.GuildTextBasedChannel;
     voiceChannel: discord.VoiceBasedChannel;
   }) {
-    let connection = this.connections[guild.id];
-    if (connection) {
-      return connection;
-    }
-    connection = this.connections[guild.id] = {
-      voiceConnection: discordVoice.joinVoiceChannel({
-        guildId: guild.id,
-        channelId: voiceChannel.id,
-        adapterCreator: guild.voiceAdapterCreator,
-      }),
-      textChannel,
-      async sendMessage(msg) {
-        await this.textChannel.send(`Holy Shit! ${msg}`);
-      },
-      voiceChannel,
-      player: new Player(),
-    };
-    connection.voiceConnection.subscribe(connection.player.discordPlayer);
-    return connection;
+    this.voiceConnection = discordVoice.joinVoiceChannel({
+      guildId: guild.id,
+      channelId: voiceChannel.id,
+      adapterCreator: guild.voiceAdapterCreator,
+    });
+    this.textChannel = textChannel;
+    this.voiceChannel = voiceChannel;
+    this.player = new Player();
+    this.voiceConnection.subscribe(this.player.discordPlayer);
   }
 
-  static async destroy(connection: Instance) {
-    connection.player.pause();
+  async sendMessage(msg: string) {
+    await this.textChannel.send(`Holy Shit! ${msg}`);
+  }
+
+  async destroy() {
+    this.player.pause();
     await delay(500);
-    connection.voiceConnection.destroy();
+    this.voiceConnection.destroy();
+    connections.remove(this);
+  }
+}
+
+class Connections {
+  private connections: Record<string, Connection> = {};
+
+  get(guildId: string) {
+    return this.connections[guildId];
+  }
+
+  getCreateIfNotExist({
+    guild,
+    textChannel,
+    voiceChannel,
+  }: {
+    guild: discord.Guild;
+    textChannel: discord.GuildTextBasedChannel;
+    voiceChannel: discord.VoiceBasedChannel;
+  }) {
+    return (
+      this.connections[guild.id] ||
+      (this.connections[guild.id] = new Connection({
+        guild,
+        textChannel,
+        voiceChannel,
+      }))
+    );
+  }
+
+  remove(connection: Connection) {
     delete this.connections[connection.textChannel.guildId];
   }
 }
+
+export const connections = new Connections();

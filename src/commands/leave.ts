@@ -1,5 +1,4 @@
 import { messageCreators } from '../messages';
-import { Connection } from '../player/connection';
 import { CommandHandler } from '../types/command';
 import { handleConnectionCreation } from '../utils';
 
@@ -10,7 +9,7 @@ export const leaveCommandHandler: CommandHandler = handleConnectionCreation(
     await connection.sendMessage(
       messageCreators.leave(connection.voiceChannel.name),
     );
-    Connection.destroy(connection);
+    connection.destroy();
   },
 );
 
