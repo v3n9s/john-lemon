@@ -10,9 +10,11 @@ export class Track {
 
   info: ytdl.videoInfo;
 
-  private buffer?: Buffer;
+  private buffer: Buffer;
 
   private format: ytdl.videoFormat;
+
+  private downloadOffset: number;
 
   constructor({ info }: { info: ytdl.videoInfo }) {
     this.info = info;
@@ -20,39 +22,38 @@ export class Track {
       filter: 'audioonly',
       quality: 'highestaudio',
     });
+    this.downloadOffset = 0;
+    this.buffer = Buffer.alloc(+this.format.contentLength);
   }
 
   getTitle() {
     return this.info.videoDetails.title;
   }
 
-  private getTrackBuffer() {
-    const trackBuffersArr: Buffer[] = [];
-
-    return new Promise<Buffer>((res) => {
+  private downloadTrackBuffer() {
+    return new Promise<void>((res) => {
       ytdl
         .downloadFromInfo(this.info, { format: this.format })
         .on('data', (chunk) => {
           if (!(chunk instanceof Buffer)) return;
-          trackBuffersArr.push(chunk);
+          chunk.copy(this.buffer, this.downloadOffset);
+          this.downloadOffset += chunk.length;
         })
         .on('end', () => {
-          res(Buffer.concat(trackBuffersArr));
+          res();
         });
     });
   }
 
-  async getTrackReadStream({
+  getTrackReadStream({
     timeOffset = 0,
     bitrate = (this.format.audioBitrate = 64),
   }: {
     timeOffset?: number;
     bitrate?: number;
   } = {}) {
-    const trackReadableStream = stream.Readable.from(
-      this.buffer || (await this.getTrackBuffer()),
-    );
-    return trackReadableStream;
+    this.downloadTrackBuffer();
+    return new TrackBufferReadStream(this.buffer, () => this.downloadOffset);
     // return <stream.PassThrough>ffmpeg()
     //   .on('error', (err) => {
     //     if (err) console.log(err);
@@ -62,5 +63,34 @@ export class Track {
     //   .seekInput(timeOffset)
     //   .audioBitrate(bitrate)
     //   .pipe();
+  }
+}
+
+class TrackBufferReadStream extends stream.Readable {
+  private buffer: Buffer;
+
+  private offset: number;
+
+  private getDownloadOffset: () => number;
+
+  constructor(buffer: Buffer, getDownloadOffset: () => number) {
+    super();
+    this.buffer = buffer;
+    this.offset = 0;
+    this.getDownloadOffset = getDownloadOffset;
+  }
+
+  _read(s: number): void {
+    const push = () => {
+      if (this.offset + s < this.getDownloadOffset()) {
+        this.push(this.buffer.subarray(this.offset, this.offset + s));
+        this.offset += s;
+      } else {
+        setTimeout(() => {
+          push();
+        }, 50);
+      }
+    };
+    push();
   }
 }

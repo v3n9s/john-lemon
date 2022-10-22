@@ -39,7 +39,7 @@ export class Player {
     this.play({ track });
   }
 
-  async play({
+  play({
     timeOffset = 0,
     bitrate = 0,
     track,
@@ -49,7 +49,7 @@ export class Player {
     track: Track;
   }) {
     const resource = discordVoice.createAudioResource(
-      await track.getTrackReadStream({ timeOffset, bitrate }),
+      track.getTrackReadStream({ timeOffset, bitrate }),
       {
         inlineVolume: true,
       },
