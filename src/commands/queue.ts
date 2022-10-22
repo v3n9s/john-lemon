@@ -6,7 +6,7 @@ export const queueCommandRegExp = /^!(queue|q) *$/g;
 
 export const queueCommandHandler: CommandHandler = handleConnectionCreation(
   (msg, connection) => {
-    const tracks = connection.player.queue.getAll();
+    const tracks = connection.player.getQueue();
     connection.sendMessage(
       tracks.length
         ? messageCreators.queue(tracks)

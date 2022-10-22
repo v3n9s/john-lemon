@@ -6,7 +6,7 @@ export const pauseCommandRegexp = /^!pause *$/g;
 
 export const pauseCommandHandler: CommandHandler = handleConnectionCreation(
   (msg, connection) => {
-    const currentTrack = connection.player.queue.get(0);
+    const currentTrack = connection.player.getCurrentTrack();
     if (currentTrack) {
       connection.sendMessage(messageCreators.pause(currentTrack.getTitle()));
       connection.player.pause();
@@ -22,7 +22,7 @@ export const unpauseCommandRegexp = /^!unpause *$/g;
 
 export const unpauseCommandHandler: CommandHandler = handleConnectionCreation(
   (msg, connection) => {
-    const currentTrack = connection.player.queue.get(0);
+    const currentTrack = connection.player.getCurrentTrack();
     if (currentTrack) {
       connection.sendMessage(messageCreators.unpause(currentTrack.getTitle()));
       connection.player.unpause();

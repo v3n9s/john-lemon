@@ -4,42 +4,30 @@ import { Connection } from './connection';
 import { Queue } from './queue';
 import { Track } from './track';
 
-export class Player {
-  discordPlayer: discordVoice.AudioPlayer;
-
-  queue: Queue;
+export class Player extends discordVoice.AudioPlayer {
+  private queue: Queue;
 
   constructor() {
-    this.discordPlayer = discordVoice.createAudioPlayer();
+    super();
     this.queue = new Queue();
 
-    this.discordPlayer.on('stateChange', (oldState, newState) => {
-      if (newState.status === 'idle') {
-        this.queue.skip(0, 1);
-        this.playIfFree();
-      }
+    this.on(discordVoice.AudioPlayerStatus.Idle, () => {
+      this.queue.skip(0, 1);
+      this.playIfFree();
     });
   }
 
-  pause() {
-    this.discordPlayer.pause();
-  }
-
-  unpause() {
-    this.discordPlayer.unpause();
-  }
-
   playIfFree(connection?: Connection) {
-    if (this.discordPlayer.state.status !== 'idle') return;
+    if (this.state.status !== 'idle') return;
     const track = this.queue.get(0);
     if (!track) return;
     if (connection?.voiceConnection.state.status === 'disconnected') {
       connection.voiceConnection.rejoin();
     }
-    this.play({ track });
+    this.playTrack({ track });
   }
 
-  play({
+  playTrack({
     timeOffset = 0,
     bitrate = 0,
     track,
@@ -56,7 +44,7 @@ export class Player {
     );
     resource.volume?.setVolume(0.25);
 
-    this.discordPlayer.play(resource);
+    this.play(resource);
   }
 
   async addTracks<arr extends string[], R extends { [k in keyof arr]: Track }>(
@@ -76,14 +64,22 @@ export class Player {
   skip(start: number, end: number) {
     this.queue.skip(start, end);
     if (start === 0) {
-      this.discordPlayer.stop();
+      this.stop();
     }
+  }
+
+  getCurrentTrack() {
+    return this.queue.get(0);
+  }
+
+  getQueue() {
+    return this.queue.getAll();
   }
 
   seek(offset: number) {
     const currentTrack = this.queue.get(0);
     if (currentTrack) {
-      this.play({ timeOffset: offset, track: currentTrack });
+      this.playTrack({ timeOffset: offset, track: currentTrack });
     }
   }
 }

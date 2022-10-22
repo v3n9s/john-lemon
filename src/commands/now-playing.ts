@@ -6,7 +6,7 @@ export const nowPlayingCommandRegExp = /^!(nowplaying|np) *$/g;
 
 export const nowPlayingCommandHandler: CommandHandler =
   handleConnectionCreation((msg, connection) => {
-    const track = connection.player.queue.get(0);
+    const track = connection.player.getCurrentTrack();
     connection.sendMessage(
       track
         ? messageCreators.currentlyPlaying(track.getTitle())

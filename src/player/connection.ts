@@ -26,7 +26,7 @@ export class Connection {
     this.textChannel = textChannel;
     this.voiceChannel = voiceChannel;
     this.player = new Player();
-    this.voiceConnection.subscribe(this.player.discordPlayer);
+    this.voiceConnection.subscribe(this.player);
   }
 
   async sendMessage(msg: string) {
