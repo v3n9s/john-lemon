@@ -16,12 +16,15 @@ export class Track {
 
   private downloadOffset: number;
 
+  private needToDownload: boolean;
+
   constructor({ info }: { info: ytdl.videoInfo }) {
     this.info = info;
     this.format = ytdl.chooseFormat(this.info.formats, {
       filter: 'audioonly',
       quality: 'highestaudio',
     });
+    this.needToDownload = true;
     this.downloadOffset = 0;
     this.buffer = Buffer.alloc(+this.format.contentLength);
   }
@@ -31,6 +34,8 @@ export class Track {
   }
 
   private downloadTrackBuffer() {
+    if (!this.needToDownload) return;
+    this.needToDownload = false;
     return new Promise<void>((res) => {
       ytdl
         .downloadFromInfo(this.info, { format: this.format })
@@ -49,20 +54,16 @@ export class Track {
     timeOffset = 0,
     bitrate = (this.format.audioBitrate = 64),
   }: {
-    timeOffset?: number;
-    bitrate?: number;
+    timeOffset?: number | undefined;
+    bitrate?: number | undefined;
   } = {}) {
     this.downloadTrackBuffer();
-    return new TrackBufferReadStream(this.buffer, () => this.downloadOffset);
-    // return <stream.PassThrough>ffmpeg()
-    //   .on('error', (err) => {
-    //     if (err) console.log(err);
-    //   })
-    //   .format(this.format.container)
-    //   .input(trackReadableStream)
-    //   .seekInput(timeOffset)
-    //   .audioBitrate(bitrate)
-    //   .pipe();
+    return (<stream.PassThrough>ffmpeg()
+      .format(this.format.container)
+      .input(new TrackBufferReadStream(this.buffer, () => this.downloadOffset))
+      .seekInput(timeOffset)
+      .audioBitrate(bitrate)
+      .pipe()).pipe(new stream.PassThrough());
   }
 }
 

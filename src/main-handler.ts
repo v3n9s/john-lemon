@@ -21,7 +21,7 @@ const commands: (readonly [RegExp, CommandHandler])[] = [
   nowPlayingCommand,
   queueCommand,
   leaveCommand,
-  // seekCommand,
+  seekCommand,
 ];
 
 export const mainHandler = (msg: discord.Message) => {

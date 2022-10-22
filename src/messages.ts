@@ -18,5 +18,5 @@ export const messageCreators = {
     `**skipping** *tracks from* \`${start}\` *to* \`${end}\``,
   skipSeveral: (amount: number) => `**skipping** \`${amount}\` *tracks*`,
   skipCurrent: () => `**skipping** \`current\` track`,
-  seek: (time: string) => `seek to ${time}`,
+  seek: (time: string) => `**seeking** to \`${time}\``,
 };
