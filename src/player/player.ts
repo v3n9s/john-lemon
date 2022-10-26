@@ -36,6 +36,7 @@ export class Player extends discordVoice.AudioPlayer {
     bitrate?: number;
     track: Track;
   }) {
+    this.pause();
     const resource = discordVoice.createAudioResource(
       track.getTrackReadStream({ timeOffset, bitrate }),
       {
@@ -64,7 +65,12 @@ export class Player extends discordVoice.AudioPlayer {
   skip(start: number, end: number) {
     this.queue.skip(start, end);
     if (start === 0) {
-      this.stop();
+      const track = this.queue.get(0);
+      if (track) {
+        this.playTrack({ track });
+      } else {
+        this.stop();
+      }
     }
   }
 

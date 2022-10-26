@@ -26,10 +26,10 @@ export const skipCommandHandler: CommandHandler = handleConnectionCreation(
       connection.player.skip(start, end + 1);
     } else if (start === undefined && end !== undefined && end > 1) {
       connection.sendMessage(messageCreators.skipSeveral(end));
-      connection.player.skip(0, end - 1);
+      connection.player.skip(0, end);
     } else {
       connection.sendMessage(messageCreators.skipCurrent());
-      connection.player.skip(0, 0);
+      connection.player.skip(0, 1);
     }
   },
 );
