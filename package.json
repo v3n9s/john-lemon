@@ -2,7 +2,9 @@
   "name": "john-lemon",
   "private": true,
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "dev": "webpack --env mode=dev",
+    "build": "webpack",
+    "start": "node dist/",
     "lint": "eslint **/*.ts"
   },
   "dependencies": {

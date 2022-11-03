@@ -13,6 +13,8 @@
     "forceConsistentCasingInFileNames": true,
     
     "lib": ["ESNext"],
-    "target": "ESNext"
+    "target": "ESNext",
+
+    "sourceMap": true
   }
 }
