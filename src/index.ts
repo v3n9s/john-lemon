@@ -1,7 +1,6 @@
 import { client } from './client';
-import { token } from './config';
+import { token, pathToFfmpeg } from './config';
 import { mainHandler } from './main-handler';
-import pathToFfmpeg from 'ffmpeg-static';
 import ffmpeg from 'fluent-ffmpeg';
 
 if (pathToFfmpeg) {
