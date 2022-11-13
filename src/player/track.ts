@@ -1,7 +1,7 @@
 import stream from 'stream';
 import ytdl from 'ytdl-core';
-import { Buffer } from 'buffer';
 import ffmpeg from 'fluent-ffmpeg';
+import { StreamAccumulator } from './streams';
 
 export class Track {
   static async create({ url }: { url: string }): Promise<Track> {
@@ -10,13 +10,11 @@ export class Track {
 
   info: ytdl.videoInfo;
 
-  private buffer: Buffer;
-
   private format: ytdl.videoFormat;
 
-  private downloadOffset: number;
+  private streamAccumulator: StreamAccumulator;
 
-  private needToDownload: boolean;
+  private needToDownload = true;
 
   constructor({ info }: { info: ytdl.videoInfo }) {
     this.info = info;
@@ -24,30 +22,21 @@ export class Track {
       filter: 'audioonly',
       quality: 'highestaudio',
     });
-    this.needToDownload = true;
-    this.downloadOffset = 0;
-    this.buffer = Buffer.alloc(+this.format.contentLength);
+    this.streamAccumulator = new StreamAccumulator({
+      bufferSize: +this.format.contentLength,
+    });
   }
 
   getTitle() {
     return this.info.videoDetails.title;
   }
 
-  private downloadTrackBuffer() {
+  private download() {
     if (!this.needToDownload) return;
     this.needToDownload = false;
-    return new Promise<void>((res) => {
-      ytdl
-        .downloadFromInfo(this.info, { format: this.format })
-        .on('data', (chunk) => {
-          if (!(chunk instanceof Buffer)) return;
-          chunk.copy(this.buffer, this.downloadOffset);
-          this.downloadOffset += chunk.length;
-        })
-        .on('end', () => {
-          res();
-        });
-    });
+    ytdl
+      .downloadFromInfo(this.info, { format: this.format })
+      .pipe(this.streamAccumulator);
   }
 
   getTrackReadStream({
@@ -57,41 +46,27 @@ export class Track {
     timeOffset?: number | undefined;
     bitrate?: number | undefined;
   } = {}) {
-    this.downloadTrackBuffer();
-    return (<stream.PassThrough>ffmpeg()
+    this.download();
+    const readStream = this.streamAccumulator.getReadStream();
+    return <stream.PassThrough>ffmpeg()
       .format(this.format.container)
-      .input(new TrackBufferReadStream(this.buffer, () => this.downloadOffset))
+      .input(readStream)
       .seekInput(timeOffset)
       .audioBitrate(bitrate)
-      .pipe()).pipe(new stream.PassThrough());
-  }
-}
-
-class TrackBufferReadStream extends stream.Readable {
-  private buffer: Buffer;
-
-  private offset: number;
-
-  private getDownloadOffset: () => number;
-
-  constructor(buffer: Buffer, getDownloadOffset: () => number) {
-    super();
-    this.buffer = buffer;
-    this.offset = 0;
-    this.getDownloadOffset = getDownloadOffset;
-  }
-
-  _read(s: number): void {
-    const push = () => {
-      if (this.offset + s < this.getDownloadOffset()) {
-        this.push(this.buffer.subarray(this.offset, this.offset + s));
-        this.offset += s;
-      } else {
-        setTimeout(() => {
-          push();
-        }, 50);
-      }
-    };
-    push();
+      .once('error', (e) => {
+        if (
+          e instanceof Error &&
+          e.message === 'Output stream error: Premature close'
+        ) {
+          console.log('expected ffmpeg error', e.message);
+        } else {
+          console.log('unexpected ffmpeg error', e);
+        }
+      })
+      .pipe()
+      .once('close', () => {
+        readStream.unpipe();
+        readStream.destroy();
+      });
   }
 }
