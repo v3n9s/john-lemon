@@ -27,18 +27,10 @@ export class Player extends discordVoice.AudioPlayer {
     this.playTrack({ track });
   }
 
-  playTrack({
-    timeOffset = 0,
-    bitrate = 0,
-    track,
-  }: {
-    timeOffset?: number;
-    bitrate?: number;
-    track: Track;
-  }) {
+  playTrack({ timeOffset = 0, track }: { timeOffset?: number; track: Track }) {
     this.pause();
     const resource = discordVoice.createAudioResource(
-      track.getReadStream({ timeOffset, bitrate }),
+      track.getReadStream(timeOffset),
       {
         inlineVolume: true,
       },

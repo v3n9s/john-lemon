@@ -39,20 +39,13 @@ export class Track {
       .pipe(this.streamAccumulator);
   }
 
-  getReadStream({
-    timeOffset = 0,
-    bitrate = (this.format.audioBitrate = 64),
-  }: {
-    timeOffset?: number | undefined;
-    bitrate?: number | undefined;
-  } = {}) {
+  getReadStream(timeOffset = 0) {
     this.download();
     const readStream = this.streamAccumulator.getReadStream();
     return <stream.PassThrough>ffmpeg()
       .format(this.format.container)
       .input(readStream)
       .seekInput(timeOffset)
-      .audioBitrate(bitrate)
       .once('error', (e) => {
         if (
           e instanceof Error &&
