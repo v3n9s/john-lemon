@@ -8,6 +8,10 @@
     "lint": "eslint **/*.ts"
   },
   "dependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.19.6",
+    "@babel/plugin-transform-typescript": "^7.20.2",
+    "@babel/register": "^7.18.9",
     "@discordjs/opus": "^0.8.0",
     "@discordjs/voice": "^0.13.0",
     "@types/eslint": "^8.4.7",
@@ -16,6 +20,7 @@
     "@types/webpack-node-externals": "^2.5.3",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
+    "babel-loader": "^9.1.0",
     "bufferutil": "^4.0.7",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
