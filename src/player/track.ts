@@ -39,7 +39,7 @@ export class Track {
       .pipe(this.streamAccumulator);
   }
 
-  getTrackReadStream({
+  getReadStream({
     timeOffset = 0,
     bitrate = (this.format.audioBitrate = 64),
   }: {

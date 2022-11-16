@@ -38,7 +38,7 @@ export class Player extends discordVoice.AudioPlayer {
   }) {
     this.pause();
     const resource = discordVoice.createAudioResource(
-      track.getTrackReadStream({ timeOffset, bitrate }),
+      track.getReadStream({ timeOffset, bitrate }),
       {
         inlineVolume: true,
       },
