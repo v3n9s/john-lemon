@@ -1,7 +1,7 @@
 import discord from 'discord.js';
 import discordVoice from '@discordjs/voice';
-import { setTimeout as delay } from 'timers/promises';
 import { Player } from './player';
+import { messageCreators } from '../messages';
 
 export class Connection {
   voiceConnection: discordVoice.VoiceConnection;
@@ -27,15 +27,19 @@ export class Connection {
     this.voiceChannel = voiceChannel;
     this.player = new Player();
     this.voiceConnection.subscribe(this.player);
+    this.voiceConnection.once('disconnected', () => {
+      this.destroy();
+    });
   }
 
   async sendMessage(msg: string) {
     await this.textChannel.send(`Holy Shit! ${msg}`);
   }
 
-  async destroy() {
-    this.player.pause();
-    await delay(500);
+  destroy() {
+    this.sendMessage(messageCreators.leave(this.voiceChannel.name));
+    this.player.skip(0, Infinity);
+    this.player.stop(true);
     this.voiceConnection.destroy();
     connections.remove(this);
   }
