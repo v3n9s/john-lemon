@@ -1,4 +1,4 @@
-import * as discord from 'discord.js';
+import discord from 'discord.js';
 import { client } from './client';
 import { nowPlayingCommand } from './commands/now-playing';
 import { pauseCommand, unpauseCommand } from './commands/pause';

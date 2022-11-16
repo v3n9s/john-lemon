@@ -1,4 +1,4 @@
-import * as discordVoice from '@discordjs/voice';
+import discordVoice from '@discordjs/voice';
 import ytpl from 'ytpl';
 import { Connection } from './connection';
 import { Queue } from './queue';

@@ -1,5 +1,5 @@
-import * as discord from 'discord.js';
-import * as discordVoice from '@discordjs/voice';
+import discord from 'discord.js';
+import discordVoice from '@discordjs/voice';
 import { setTimeout as delay } from 'timers/promises';
 import { Player } from './player';
 
