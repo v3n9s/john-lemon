@@ -17,7 +17,7 @@ export default (env: { [k: string]: string | boolean }): Configuration => {
       rules: [
         {
           test: /\.ts$/i,
-          use: ['ts-loader'],
+          use: ['babel-loader'],
         },
       ],
     },
