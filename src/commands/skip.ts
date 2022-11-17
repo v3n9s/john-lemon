@@ -7,7 +7,7 @@ export const skipCommandRegexp = /^!skip */g;
 export const skipCommandHandler: CommandHandler = handleConnectionCreation(
   (msg, connection) => {
     const args = msg.content
-      .replaceAll(skipCommandRegexp, '')
+      .replace(skipCommandRegexp, '')
       .trim()
       .split(/ +/g)
       .map((v) => +v)

@@ -7,7 +7,7 @@ export const seekCommandRegExp = /^!seek +/g;
 export const seekCommandHandler: CommandHandler = handleConnectionCreation(
   (msg, connection) => {
     const args = msg.content
-      .replaceAll(seekCommandRegExp, '')
+      .replace(seekCommandRegExp, '')
       .split(':')
       .reverse()
       .map((v) => +v);
