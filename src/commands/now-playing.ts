@@ -14,7 +14,7 @@ export const nowPlayingCommandHandler: CommandHandler =
     );
   });
 
-export const nowPlayingCommand = [
+export const nowPlayingCommand = <const>[
   nowPlayingCommandRegExp,
   nowPlayingCommandHandler,
-] as const;
+];

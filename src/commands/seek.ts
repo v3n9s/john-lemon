@@ -28,4 +28,4 @@ export const seekCommandHandler: CommandHandler = handleConnectionCreation(
   },
 );
 
-export const seekCommand = [seekCommandRegExp, seekCommandHandler] as const;
+export const seekCommand = <const>[seekCommandRegExp, seekCommandHandler];
