@@ -9,8 +9,7 @@ export const skipCommandHandler: CommandHandler = handleConnectionCreation(
     const args = msg.content
       .replaceAll(skipCommandRegexp, '')
       .trim()
-      .split(' ')
-      .filter((v) => v !== '')
+      .split(/ +/g)
       .map((v) => +v)
       .filter((v, i) => i < 2);
 
@@ -21,10 +20,10 @@ export const skipCommandHandler: CommandHandler = handleConnectionCreation(
 
     const end = args.pop();
     const start = args.pop();
-    if (start !== undefined && end !== undefined) {
+    if (start !== undefined && start > 1 && end !== undefined) {
       connection.sendMessage(messageCreators.skipRange(start, end));
-      connection.player.skip(start, end + 1);
-    } else if (start === undefined && end !== undefined && end > 1) {
+      connection.player.skip(start - 1, end);
+    } else if (end !== undefined && end > 1) {
       connection.sendMessage(messageCreators.skipSeveral(end));
       connection.player.skip(0, end);
     } else {
