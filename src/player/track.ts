@@ -18,10 +18,12 @@ export class Track {
 
   constructor({ info }: { info: ytdl.videoInfo }) {
     this.info = info;
-    this.format = ytdl.chooseFormat(this.info.formats, {
-      filter: 'audioonly',
-      quality: 'highestaudio',
-    });
+    const audioOnlyFormats = ytdl.filterFormats(this.info.formats, 'audioonly');
+    this.format =
+      audioOnlyFormats
+        .filter((f) => f.audioBitrate && f.audioBitrate >= 64)
+        .sort((a, b) => +a.contentLength - +b.contentLength)[0] ||
+      ytdl.chooseFormat(audioOnlyFormats, { quality: 'highestaudio' });
     this.streamAccumulator = new StreamAccumulator({
       bufferSize: +this.format.contentLength,
     });
