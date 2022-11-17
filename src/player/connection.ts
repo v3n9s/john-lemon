@@ -32,8 +32,10 @@ export class Connection {
     });
   }
 
-  async sendMessage(msg: string) {
-    await this.textChannel.send(`Holy Shit! ${msg}`);
+  sendMessage(msg: string) {
+    this.textChannel.send(`Holy Shit! ${msg}`).catch((e) => {
+      console.error('Error occured when sending message: ', e);
+    });
   }
 
   destroy() {

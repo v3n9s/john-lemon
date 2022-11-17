@@ -5,7 +5,7 @@ import { handleConnectionCreation } from '../utils';
 export const seekCommandRegExp = /^!seek +/g;
 
 export const seekCommandHandler: CommandHandler = handleConnectionCreation(
-  async (msg, connection) => {
+  (msg, connection) => {
     const args = msg.content
       .replaceAll(seekCommandRegExp, '')
       .split(':')
@@ -17,7 +17,7 @@ export const seekCommandHandler: CommandHandler = handleConnectionCreation(
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
-    await connection.sendMessage(
+    connection.sendMessage(
       messageCreators.seek(
         (hours ? `${hours}:`.padStart(3, '0') : '') +
           `${minutes}:`.padStart(3, '0') +
