@@ -2,7 +2,7 @@ import { messageCreators } from '../messages.js';
 import { CommandHandler } from '../types/command.js';
 import { handleConnectionCreation } from '../utils.js';
 
-export const queueCommandRegExp = /^!(queue|q) */g;
+export const queueCommandRegExp = /^!(queue|q)($|( +))/g;
 
 export const queueCommandHandler: CommandHandler = handleConnectionCreation(
   (msg, connection) => {
