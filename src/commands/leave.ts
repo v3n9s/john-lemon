@@ -9,4 +9,4 @@ export const leaveCommandHandler: CommandHandler = handleConnectionCreation(
   },
 );
 
-export const leaveCommand = <const>[leaveCommandRegExp, leaveCommandHandler];
+export const leaveCommand = [leaveCommandRegExp, leaveCommandHandler] as const;

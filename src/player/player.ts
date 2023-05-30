@@ -45,7 +45,7 @@ export class Player extends discordVoice.AudioPlayer {
   ) {
     const tracks = await Promise.all(urls.map((url) => Track.create({ url })));
     this.queue.push(...tracks);
-    return <R>tracks;
+    return tracks as R;
   }
 
   async addPlaylist(url: string) {

@@ -33,4 +33,4 @@ export const skipCommandHandler: CommandHandler = handleConnectionCreation(
   },
 );
 
-export const skipCommand = <const>[skipCommandRegexp, skipCommandHandler];
+export const skipCommand = [skipCommandRegexp, skipCommandHandler] as const;

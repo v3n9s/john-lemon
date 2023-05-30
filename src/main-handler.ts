@@ -30,7 +30,7 @@ export const mainHandler = (msg: discord.Message) => {
   const commandHandler = getCommand(msg.content);
 
   if (commandHandler && msg.guild) {
-    commandHandler(<discord.Message<true>>msg);
+    commandHandler(msg as discord.Message<true>);
 
     if (msg.deletable) {
       msg.delete().catch(() => {

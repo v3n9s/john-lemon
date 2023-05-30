@@ -31,4 +31,4 @@ export const playCommandHandler: CommandHandler = handleConnectionCreation(
   true,
 );
 
-export const playCommand = <const>[playCommandRegexp, playCommandHandler];
+export const playCommand = [playCommandRegexp, playCommandHandler] as const;

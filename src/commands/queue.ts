@@ -22,4 +22,4 @@ export const queueCommandHandler: CommandHandler = handleConnectionCreation(
   },
 );
 
-export const queueCommand = <const>[queueCommandRegExp, queueCommandHandler];
+export const queueCommand = [queueCommandRegExp, queueCommandHandler] as const;

@@ -44,7 +44,7 @@ export class Track {
   getReadStream(timeOffset = 0) {
     this.download();
     const readStream = this.streamAccumulator.getReadStream();
-    return <stream.PassThrough>ffmpeg()
+    return ffmpeg()
       .format(this.format.container)
       .input(readStream)
       .seekInput(timeOffset)
@@ -62,6 +62,6 @@ export class Track {
       .once('close', () => {
         readStream.unpipe();
         readStream.destroy();
-      });
+      }) as stream.PassThrough;
   }
 }

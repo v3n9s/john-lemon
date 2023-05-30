@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import pathToStaticFfmpeg from 'ffmpeg-static';
 
-export const token = <string>process.env.DISCORD_BOT_TOKEN;
+export const token = process.env.DISCORD_BOT_TOKEN as string;
 
-export const pathToFfmpeg = <string>(<unknown>pathToStaticFfmpeg);
+export const pathToFfmpeg = pathToStaticFfmpeg as unknown as string;
 
 if (typeof token !== 'string' || token.length === 0) {
   throw new Error(

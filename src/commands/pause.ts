@@ -16,7 +16,7 @@ export const pauseCommandHandler: CommandHandler = handleConnectionCreation(
   },
 );
 
-export const pauseCommand = <const>[pauseCommandRegexp, pauseCommandHandler];
+export const pauseCommand = [pauseCommandRegexp, pauseCommandHandler] as const;
 
 export const unpauseCommandRegexp = /^!unpause *$/g;
 
@@ -32,7 +32,7 @@ export const unpauseCommandHandler: CommandHandler = handleConnectionCreation(
   },
 );
 
-export const unpauseCommand = <const>[
+export const unpauseCommand = [
   unpauseCommandRegexp,
   unpauseCommandHandler,
-];
+] as const;
