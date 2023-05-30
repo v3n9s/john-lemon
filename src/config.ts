@@ -3,7 +3,7 @@ import pathToStaticFfmpeg from 'ffmpeg-static';
 
 export const token = <string>process.env.DISCORD_BOT_TOKEN;
 
-export const pathToFfmpeg = <string>pathToStaticFfmpeg;
+export const pathToFfmpeg = <string>(<unknown>pathToStaticFfmpeg);
 
 if (typeof token !== 'string' || token.length === 0) {
   throw new Error(
