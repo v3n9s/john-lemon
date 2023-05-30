@@ -6,7 +6,7 @@ module.exports = {
   env: {
     node: true,
   },
-  ignorePatterns: ['.eslintrc.cjs'],
+  ignorePatterns: ['.eslintrc.cjs', '/dist'],
   overrides: [
     {
       files: ['*.ts'],

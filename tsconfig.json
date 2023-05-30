@@ -1,20 +1,25 @@
 {
+  "include": ["./src"],
+  "exclude": [],
   "compilerOptions": {
-    "strict": true,
-
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
+    "strict": true,
 
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "rootDir": "./src",
+
+    "newLine": "lf",
+    "outDir": "./dist",
+    "sourceMap": true,
 
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
 
-    "lib": ["ESNext"],
-    "target": "ESNext",
+    "lib": ["es2022"],
+    "target": "es2022",
 
-    "sourceMap": true
+    "skipLibCheck": true
   }
 }
