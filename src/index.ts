@@ -7,7 +7,7 @@ if (pathToFfmpeg) {
   ffmpeg.setFfmpegPath(pathToFfmpeg);
 }
 
-client.once('ready', (c) => {
+client.once('ready', () => {
   console.log("HOLY SHIT IT'S JOHN LEMON!");
   console.timeEnd('start');
 });
