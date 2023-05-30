@@ -1,5 +1,5 @@
 import discord from 'discord.js';
-import discordVoice from '@discordjs/voice';
+import * as discordVoice from '@discordjs/voice';
 import { Player } from './player.js';
 import { messageCreators } from '../messages.js';
 
