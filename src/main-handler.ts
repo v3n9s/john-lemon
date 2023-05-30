@@ -1,13 +1,13 @@
 import discord from 'discord.js';
-import { client } from './client';
-import { nowPlayingCommand } from './commands/now-playing';
-import { pauseCommand, unpauseCommand } from './commands/pause';
-import { playCommand } from './commands/play';
-import { queueCommand } from './commands/queue';
-import { leaveCommand } from './commands/leave';
-import { skipCommand } from './commands/skip';
-import { CommandHandler } from './types/command';
-import { seekCommand } from './commands/seek';
+import { client } from './client.js';
+import { nowPlayingCommand } from './commands/now-playing.js';
+import { pauseCommand, unpauseCommand } from './commands/pause.js';
+import { playCommand } from './commands/play.js';
+import { queueCommand } from './commands/queue.js';
+import { leaveCommand } from './commands/leave.js';
+import { skipCommand } from './commands/skip.js';
+import { CommandHandler } from './types/command.js';
+import { seekCommand } from './commands/seek.js';
 
 const getCommand = (command: string) => {
   return commands.find(([regexp]) => command.match(regexp))?.[1];

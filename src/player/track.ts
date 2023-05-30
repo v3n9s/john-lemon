@@ -1,7 +1,7 @@
 import stream from 'stream';
 import ytdl from 'ytdl-core';
 import ffmpeg from 'fluent-ffmpeg';
-import { StreamAccumulator } from './streams';
+import { StreamAccumulator } from './streams.js';
 
 export class Track {
   static async create({ url }: { url: string }): Promise<Track> {

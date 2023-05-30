@@ -1,7 +1,7 @@
 import discord from 'discord.js';
 import discordVoice from '@discordjs/voice';
-import { Player } from './player';
-import { messageCreators } from '../messages';
+import { Player } from './player.js';
+import { messageCreators } from '../messages.js';
 
 export class Connection {
   voiceConnection: discordVoice.VoiceConnection;

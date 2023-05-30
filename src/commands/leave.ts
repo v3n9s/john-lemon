@@ -1,5 +1,5 @@
-import { CommandHandler } from '../types/command';
-import { handleConnectionCreation } from '../utils';
+import { CommandHandler } from '../types/command.js';
+import { handleConnectionCreation } from '../utils.js';
 
 export const leaveCommandRegExp = /^!leave *$/g;
 

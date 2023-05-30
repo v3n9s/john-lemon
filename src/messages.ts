@@ -1,4 +1,4 @@
-import { Track } from './player/track';
+import { Track } from './player/track.js';
 
 export const messageCreators = {
   currentlyPlaying: (trackTitle: string) =>

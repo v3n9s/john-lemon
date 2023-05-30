@@ -1,6 +1,6 @@
-import { messageCreators } from '../messages';
-import { CommandHandler } from '../types/command';
-import { handleConnectionCreation } from '../utils';
+import { messageCreators } from '../messages.js';
+import { CommandHandler } from '../types/command.js';
+import { handleConnectionCreation } from '../utils.js';
 
 export const pauseCommandRegexp = /^!pause *$/g;
 

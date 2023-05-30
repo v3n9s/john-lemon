@@ -1,10 +1,10 @@
-import { messageCreators } from '../messages';
-import { CommandHandler } from '../types/command';
+import { messageCreators } from '../messages.js';
+import { CommandHandler } from '../types/command.js';
 import {
   handleConnectionCreation,
   isValidYoutubeLink,
   isYoutubePlaylistLink,
-} from '../utils';
+} from '../utils.js';
 
 export const playCommandRegexp = /^!(play|p) +/g;
 

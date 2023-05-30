@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
-import { connections, Connection } from './player/connection';
-import { CommandHandler } from './types/command';
+import { connections, Connection } from './player/connection.js';
+import { CommandHandler } from './types/command.js';
 
 export const isValidYoutubeLink = (url: string) =>
   !!url.match(

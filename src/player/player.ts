@@ -1,8 +1,8 @@
 import discordVoice from '@discordjs/voice';
 import ytpl from 'ytpl';
-import { Connection } from './connection';
-import { Queue } from './queue';
-import { Track } from './track';
+import { Connection } from './connection.js';
+import { Queue } from './queue.js';
+import { Track } from './track.js';
 
 export class Player extends discordVoice.AudioPlayer {
   private queue: Queue;

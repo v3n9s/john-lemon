@@ -1,6 +1,6 @@
-import { client } from './client';
-import { token, pathToFfmpeg } from './config';
-import { mainHandler } from './main-handler';
+import { client } from './client.js';
+import { token, pathToFfmpeg } from './config.js';
+import { mainHandler } from './main-handler.js';
 import ffmpeg from 'fluent-ffmpeg';
 
 if (pathToFfmpeg) {
